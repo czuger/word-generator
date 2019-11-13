@@ -16,7 +16,7 @@ end
 
 class BuildWordsDb
 
-	MIN_WORDS = 100000
+	MIN_WORDS = 30000
 
 	LOCALE_ALLOWED_CHAR = {
 		fr: 'abcdefghijklmnopqrstuvwxyzàâæçéèêëîïôœùûüÿ',
@@ -69,7 +69,8 @@ class BuildWordsDb
 			# Single match isn't enough, we need to check if the match == the full link
 			match = link.match( /^\/wiki\/[^:#]+/ )
 			if match && link == match[0]
-				@pages_to_parse << "https://#{@locale}.wikipedia.org" + link
+				link = "https://#{@locale}.wikipedia.org" + link
+				@pages_to_parse << link unless @pages_to_parse.include?( link )
 			end
 		end
 	end
@@ -79,7 +80,7 @@ class BuildWordsDb
 		doc.xpath( '//p' ).each do |p|
 			p.text.split( '.' ).each do |sentence|
 
-				fs = sentence.downcase.gsub( /[:=<>\\"'\/{}]/, ' ' ).gsub( /[^#{LOCALE_ALLOWED_CHAR}]/, ' ' ).squeeze( ' ' )
+				fs = sentence.downcase.gsub( /[,:=<>\\"'\/{}]/, ' ' ).gsub( /[^#{LOCALE_ALLOWED_CHAR[@locale.to_sym]}]/, ' ' ).squeeze( ' ' )
 
 				if fs.length > 5
 
@@ -125,12 +126,12 @@ class BuildWordsDb
 			f.puts @n_grams.to_yaml
 		end
 
-		puts @words.count
+		# puts @words.count
 	end
 
 end
 
-BuildWordsDb.new( 'fr' ).parse_pages
+BuildWordsDb.new( 'en' ).parse_pages
 
 # YAML.load_file( 'words_db/en_pages.yml' ).each do |file|
 # 	puts "Reading #{file}"
