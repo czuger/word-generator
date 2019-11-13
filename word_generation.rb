@@ -6,10 +6,10 @@ letters_matrix = JSON.parse( File.read( 'words_db/fr' + '/letters_matrix.json' )
 1.upto( 10 ).each do
 
 	word_array = []
-	current_letter = letters_matrix.keys.sample
+	current_letter = 'l'
 	word_array << current_letter
 
-	1.upto( rand( 4 .. 8 ) ).each do
+	1.upto( rand( 4 .. 12 ) ).each do
 		l_m = letters_matrix[current_letter]
 
 		break unless l_m
