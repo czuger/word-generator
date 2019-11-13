@@ -39,6 +39,8 @@ class BuildWordsDb
 		@locale = locale
 		@min_words = min_words
 		@transliterate = transliterate
+
+		puts "Transliteration = #{transliterate}"
 	end
 
 	def parse_pages
