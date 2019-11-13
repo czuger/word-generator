@@ -143,4 +143,4 @@ end
 
 # BuildWordsDb.new( 'fa', 10000, transliterate: true ).parse_pages
 
-# BuildWordsDb.new( 'fa', 10000, transliterate: true ).parse_pages
+BuildWordsDb.new( 'zu', 10000 ).parse_pages
