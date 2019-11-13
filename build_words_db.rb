@@ -49,11 +49,9 @@ class BuildWordsDb
 
 	private
 
-	# Recursively parse pages until we have enough words or have no more pages to parse.
+	# Parse pages until we have enough words or have no more pages to parse.
 	def sub_page_parser
-		if @words.count >= @min_words || @pages_to_parse.empty?
-			return
-		else
+		while @words.count < @min_words && !@pages_to_parse.empty?
 			link = @pages_to_parse.pluck!
 			puts "Processing #{link}"
 
@@ -62,7 +60,6 @@ class BuildWordsDb
 			puts "Word count : #{@words.count}"
 
 			process_links( doc )
-			sub_page_parser
 		end
 	end
 
@@ -144,4 +141,6 @@ class BuildWordsDb
 
 end
 
-BuildWordsDb.new( 'fa', 100000, transliterate: true ).parse_pages
+# BuildWordsDb.new( 'fa', 10000, transliterate: true ).parse_pages
+
+# BuildWordsDb.new( 'fa', 10000, transliterate: true ).parse_pages
