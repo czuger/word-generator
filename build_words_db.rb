@@ -2,7 +2,9 @@ require 'open-uri'
 require 'pp'
 require 'nokogiri'
 require 'yaml'
+require 'json'
 require 'set'
+require 'fileutils'
 
 class Set
 	def pluck!
@@ -16,23 +18,21 @@ end
 
 class BuildWordsDb
 
-	MIN_WORDS = 30000
-
 	LOCALE_ALLOWED_CHAR = {
 		fr: 'abcdefghijklmnopqrstuvwxyzàâæçéèêëîïôœùûüÿ',
 		en: 'abcdefghijklmnopqrstuvwxyz',
 		de: 'abcdefghijklmnopqrstuvwxyzäöüß',
-
 	}
 
-	def initialize( locale )
-		@words = Set.new
-		@first_words = Set.new
-		@n_grams = { }
+	def initialize( locale, min_words )
+		@words = {}
+		@first_words = {}
+		@n_grams = {}
 
 		@pages_to_parse = Set.new
 
 		@locale = locale
+		@min_words = min_words
 	end
 
 	def parse_pages
@@ -45,7 +45,7 @@ class BuildWordsDb
 
 	# Recursively parse pages until we have enough words or have no more pages to parse.
 	def sub_page_parser
-		if @words.count >= MIN_WORDS || @pages_to_parse.empty?
+		if @words.count >= @min_words || @pages_to_parse.empty?
 			return
 		else
 			link = @pages_to_parse.pluck!
@@ -92,17 +92,16 @@ class BuildWordsDb
 
 							if word_count == 0
 								last_word = word
-								@first_words << word unless @first_words.include?( last_word )
+								@first_words[word] ||= 0
+								@first_words[word] += 1
 							else
 								@n_grams[last_word] ||= {}
 								@n_grams[last_word][word] ||= 0
 								@n_grams[last_word][word] += 1
 							end
 
-							unless @words.include?( word )
-								# puts sentence.downcase.delete( '\\"\'/' ) if word[0] == '"'
-								@words << word
-							end
+							@words[word] ||= 0
+							@words[word] += 1
 
 							word_count += 1
 						end
@@ -114,26 +113,24 @@ class BuildWordsDb
 
 	# Write produced data to file
 	def write_files
-		File.open( "words_db/#{@locale}_words.yml", 'w' ) do |f|
-			f.puts @words.sort.to_yaml
+		FileUtils.mkpath( "words_db/#{@locale}" )
+
+		File.open( "words_db/#{@locale}/words.json", 'w' ) do |f|
+			f.write JSON.pretty_generate( @words )
 		end
 
-		File.open( "words_db/#{@locale}_first_words.yml", 'w' ) do |f|
-			f.puts @first_words.sort.to_yaml
+		File.open( "words_db/#{@locale}/first_words.json", 'w' ) do |f|
+			f.write JSON.pretty_generate( @first_words )
 		end
 
-		File.open( "words_db/#{@locale}_n_grams.yml", 'w' ) do |f|
-			f.puts @n_grams.to_yaml
+		File.open( "words_db/#{@locale}/n_grams.json", 'w' ) do |f|
+			f.write JSON.pretty_generate( @n_grams )
 		end
 
 		# puts @words.count
+		# p @words
 	end
 
 end
 
-BuildWordsDb.new( 'en' ).parse_pages
-
-# YAML.load_file( 'words_db/en_pages.yml' ).each do |file|
-# 	puts "Reading #{file}"
-# 	doc = Nokogiri::HTML(open(file ) )
-# end
+BuildWordsDb.new( 'en', 100000 ).parse_pages
