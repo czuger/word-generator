@@ -141,6 +141,9 @@ class BuildWordsDb
 
 end
 
-# BuildWordsDb.new( 'fa', 10000, transliterate: true ).parse_pages
+unless ARGV.count == 2 || ARGV.count == 3
+	puts 'usage build_words_db.rb <locale> <min_words> <transliterate>'
+	exit
+end
 
-BuildWordsDb.new( 'zu', 10000 ).parse_pages
+BuildWordsDb.new( ARGV[0], ARGV[1].to_i, transliterate: ARGV[2] == 'transliterate' ).parse_pages
