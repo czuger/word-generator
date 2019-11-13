@@ -16,18 +16,24 @@ end
 
 class BuildWordsDb
 
-	MIN_WORDS = 100000
+	MIN_WORDS = 20000
 
-	def initialize
+	LOCALE_ALLOWED_CHAR = {
+		fr: 'abcdefghijklmnopqrstuvwxyzàâæçéèêëîïôœùûüÿ'
+	}
+
+	def initialize( locale )
 		@words = Set.new
 		@first_words = Set.new
 		@n_grams = { }
 
 		@pages_to_parse = Set.new
+
+		@locale = locale
 	end
 
 	def parse_pages
-		@pages_to_parse = YAML.load_file( 'words_db/en_pages.yml' ).to_set
+		@pages_to_parse = YAML.load_file( "words_db/#{@locale}_pages.yml" ).to_set
 		sub_page_parser
 		write_files
 	end
@@ -60,7 +66,7 @@ class BuildWordsDb
 			# Single match isn't enough, we need to check if the match == the full link
 			match = link.match( /^\/wiki\/[^:#]+/ )
 			if match && link == match[0]
-				@pages_to_parse << 'https://en.wikipedia.org' + link
+				@pages_to_parse << "https://#{@locale}.wikipedia.org" + link
 			end
 		end
 	end
@@ -69,7 +75,7 @@ class BuildWordsDb
 	def process_page( doc )
 		doc.xpath( '//p' ).each do |p|
 			p.text.split( '.' ).each do |sentence|
-				fs = sentence.gsub( /\W/, ' ' ).gsub( /\d/, '' ).squeeze( ' ' ).downcase
+				fs = sentence.downcase.delete( '\\"\'/{}' ).gsub( /[^#{LOCALE_ALLOWED_CHAR}]/, ' ' ).gsub( /\d/, '' ).squeeze( ' ' )
 
 				if fs.length > 5
 
@@ -89,6 +95,7 @@ class BuildWordsDb
 							end
 
 							unless @words.include?( word )
+								# puts sentence.downcase.delete( '\\"\'/' ) if word[0] == '"'
 								@words << word
 							end
 
@@ -102,15 +109,15 @@ class BuildWordsDb
 
 	# Write produced data to file
 	def write_files
-		File.open( 'words_db/en_words.yml', 'w' ) do |f|
+		File.open( "words_db/#{@locale}_words.yml", 'w' ) do |f|
 			f.puts @words.sort.to_yaml
 		end
 
-		File.open( 'words_db/en_first_words.yml', 'w' ) do |f|
+		File.open( "words_db/#{@locale}_first_words.yml", 'w' ) do |f|
 			f.puts @first_words.sort.to_yaml
 		end
 
-		File.open( 'words_db/en_n_grams.yml', 'w' ) do |f|
+		File.open( "words_db/#{@locale}_n_grams.yml", 'w' ) do |f|
 			f.puts @n_grams.to_yaml
 		end
 
@@ -119,7 +126,7 @@ class BuildWordsDb
 
 end
 
-BuildWordsDb.new.parse_pages
+BuildWordsDb.new( 'fr' ).parse_pages
 
 # YAML.load_file( 'words_db/en_pages.yml' ).each do |file|
 # 	puts "Reading #{file}"
