@@ -1,6 +1,61 @@
 # Non roman languages are transliterated to english first
 # because english alphabet is the simplest
 
-i18n:
-  transliterate:
-    rule:
+en:
+  dummy:
+
+  i18n:
+    transliterate:
+      rule:
+        # The arabic transliteration is based on a twisted version of https://fr.wikipedia.org/wiki/ArabTeX
+        # I modified all non english characters by feeling. Remember that the aim of this project is to build a funny words generator
+        # But I would be very happy if somebody speaking arabic could replace this by the right transliterations :)
+        ا: "A"
+        أ: "a'"
+        ب: "b"
+        ت: "t"
+        ث: "ht"
+        ج: "jfg"
+        ح: "zh"
+        خ: "jzh"
+        د: "d"
+        ذ: "hd"
+        ر: "r"
+        ز: "z"
+        س: "s"
+        ش: "fs"
+        ص: "zs"
+        ض: "zd"
+        ط: "zt"
+        ظ: "zz"
+        ع: "m"
+        غ: "zg"
+        ف: "f"
+        ق: "q"
+        ك: "k"
+        ل: "l"
+        م: "m"
+        ن: "n"
+        و: "wU"
+        ه: "h"
+        ي: "yI"
+        َ: "a"
+        ُ: "o"
+        ِ: "e"
+        پ: "p"
+        چ: "fc"
+        ژ: "fz"
+        گ: "g"
+        ک: "k"
+        ی: "Y"
+        ۀ: "Hi"
+        آ: "A"
+        ة: "T"
+        ء: "m"
+        ئ: "y"
+        ؤ: "Um"
+        ً: "aN"
+        ّ: "xx"
+        ،: ","
+        ؛: ";"
+        ؟: "?"
