@@ -16,7 +16,7 @@ end
 
 class BuildWordsDb
 
-	MIN_WORDS = 50000
+	MIN_WORDS = 100000
 
 	def initialize
 		@words = Set.new
@@ -26,8 +26,8 @@ class BuildWordsDb
 		@pages_to_parse = Set.new
 	end
 
-	def parse_pages( start )
-		@pages_to_parse << start
+	def parse_pages
+		@pages_to_parse = YAML.load_file( 'words_db/en_pages.yml' ).to_set
 		sub_page_parser
 		write_files
 	end
@@ -119,7 +119,7 @@ class BuildWordsDb
 
 end
 
-BuildWordsDb.new.parse_pages( 'https://en.wikipedia.org/wiki/English_language' )
+BuildWordsDb.new.parse_pages
 
 # YAML.load_file( 'words_db/en_pages.yml' ).each do |file|
 # 	puts "Reading #{file}"
