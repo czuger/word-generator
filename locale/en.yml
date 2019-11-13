@@ -2,60 +2,111 @@
 # because english alphabet is the simplest
 
 en:
-  dummy:
-
   i18n:
     transliterate:
       rule:
-        # The arabic transliteration is based on a twisted version of https://fr.wikipedia.org/wiki/ArabTeX
-        # I modified all non english characters by feeling. Remember that the aim of this project is to build a funny words generator
-        # But I would be very happy if somebody speaking arabic could replace this by the right transliterations :)
-        ا: "A"
-        أ: "a'"
-        ب: "b"
-        ت: "t"
-        ث: "ht"
-        ج: "jfg"
-        ح: "zh"
-        خ: "jzh"
-        د: "d"
-        ذ: "hd"
-        ر: "r"
-        ز: "z"
-        س: "s"
-        ش: "fs"
-        ص: "zs"
-        ض: "zd"
-        ط: "zt"
-        ظ: "zz"
-        ع: "m"
-        غ: "zg"
-        ف: "f"
-        ق: "q"
-        ك: "k"
-        ل: "l"
-        م: "m"
-        ن: "n"
-        و: "wU"
-        ه: "h"
-        ي: "yI"
-        َ: "a"
-        ُ: "o"
-        ِ: "e"
-        پ: "p"
-        چ: "fc"
-        ژ: "fz"
-        گ: "g"
-        ک: "k"
-        ی: "Y"
-        ۀ: "Hi"
-        آ: "A"
-        ة: "T"
-        ء: "m"
-        ئ: "y"
-        ؤ: "Um"
-        ً: "aN"
-        ّ: "xx"
-        ،: ","
-        ؛: ";"
-        ؟: "?"
+        # CAUTION : thoses transliteration is good enough for fun words generation, do not use it for real arabic transliteration.
+        #
+        # Arabic transliteration
+        ا: a
+        أ: a
+        آ: a
+        إ: e
+        ب: b
+        ت: t
+        ث: th
+        ج: j
+        ح: h
+        خ: kh
+        د: d
+        ذ: d
+        ر: r
+        ز: z
+        س: s
+        ش: sh
+        ص: s
+        ض: d
+        ط: t
+        ظ: z
+        ع: "'e"
+        غ: gh
+        ف: f
+        ق: q
+        ك: k
+        ل: l
+        م: m
+        ن: n
+        ه: h
+        و: w
+        ي: y
+        ى: a
+        ئ: "'e"
+        ء: "'"
+        ؤ: "'e"
+        لا: la
+        ة: h
+        "؟": "?"
+        "!": "!"
+        "،": ","
+        َ‎: a
+        ُ: u
+        ِ‎: e
+        ٌ: un
+        ً: an
+        ٍ: en
+        "\\n": "\\n"
+
+        # Farsi transliteration
+        ا: a
+        أ: a
+        آ: a
+        إ: e
+        ب: b
+        ت: t
+        ث: th
+        ج: j
+        ح: h
+        خ: kh
+        د: d
+        ذ: d
+        ر: r
+        ز: z
+        س: s
+        ش: sh
+        ص: s
+        ض: d
+        ط: t
+        ظ: z
+        ع: "'e"
+        غ: gh
+        ف: f
+        ق: q
+        ك: k
+        ل: l
+        م: m
+        ن: n
+        ه: h
+        و: w
+        ي: y
+        ى: a
+        ئ: "'e"
+        ء: "'"
+        ؤ: "'e"
+        لا: la
+        ک: ke
+        پ: pe
+        چ: che
+        ژ: je
+        گ: gu
+        ی: a
+        ة: h
+        "؟": "?"
+        "!": "!"
+        "،": ","
+        َ‎: a
+        ُ: u
+        ِ‎: e
+        ٌ: un
+        ً: an
+        ٍ: en
+        "\\n": "\\n"

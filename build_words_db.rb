@@ -5,6 +5,10 @@ require 'yaml'
 require 'json'
 require 'set'
 require 'fileutils'
+require 'i18n'
+
+I18n.load_path = Dir['locale/*.yml']
+I18n.backend.load_translations
 
 class Set
 	def pluck!
@@ -22,9 +26,10 @@ class BuildWordsDb
 		fr: 'abcdefghijklmnopqrstuvwxyzàâæçéèêëîïôœùûüÿ',
 		en: 'abcdefghijklmnopqrstuvwxyz',
 		de: 'abcdefghijklmnopqrstuvwxyzäöüß',
+		ar: 'abcdefghijklmnopqrstuvwxyz',
 	}
 
-	def initialize( locale, min_words )
+	def initialize( locale, min_words, transliterate: false )
 		@words = {}
 		@first_words = {}
 		@n_grams = {}
@@ -33,6 +38,7 @@ class BuildWordsDb
 
 		@locale = locale
 		@min_words = min_words
+		@transliterate = transliterate
 	end
 
 	def parse_pages
@@ -79,6 +85,8 @@ class BuildWordsDb
 	def process_page( doc )
 		doc.xpath( '//p' ).each do |p|
 			p.text.split( '.' ).each do |sentence|
+
+				sentence = I18n.transliterate( sentence ) if @transliterate
 
 				fs = sentence.downcase.gsub( /[,:=<>\\"'\/{}]/, ' ' ).gsub( /[^#{LOCALE_ALLOWED_CHAR[@locale.to_sym]}]/, ' ' ).squeeze( ' ' )
 
@@ -133,4 +141,4 @@ class BuildWordsDb
 
 end
 
-BuildWordsDb.new( 'de', 100000 ).parse_pages
+BuildWordsDb.new( 'ar', 10000, transliterate: true ).parse_pages
