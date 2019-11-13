@@ -16,10 +16,13 @@ end
 
 class BuildWordsDb
 
-	MIN_WORDS = 20000
+	MIN_WORDS = 100000
 
 	LOCALE_ALLOWED_CHAR = {
-		fr: 'abcdefghijklmnopqrstuvwxyzàâæçéèêëîïôœùûüÿ'
+		fr: 'abcdefghijklmnopqrstuvwxyzàâæçéèêëîïôœùûüÿ',
+		en: 'abcdefghijklmnopqrstuvwxyz',
+		de: 'abcdefghijklmnopqrstuvwxyzäöüß',
+
 	}
 
 	def initialize( locale )
@@ -75,7 +78,8 @@ class BuildWordsDb
 	def process_page( doc )
 		doc.xpath( '//p' ).each do |p|
 			p.text.split( '.' ).each do |sentence|
-				fs = sentence.downcase.delete( '\\"\'/{}' ).gsub( /[^#{LOCALE_ALLOWED_CHAR}]/, ' ' ).gsub( /\d/, '' ).squeeze( ' ' )
+
+				fs = sentence.downcase.gsub( /[:=<>\\"'\/{}]/, ' ' ).gsub( /[^#{LOCALE_ALLOWED_CHAR}]/, ' ' ).squeeze( ' ' )
 
 				if fs.length > 5
 
