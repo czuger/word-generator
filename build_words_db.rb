@@ -2,16 +2,17 @@ require 'open-uri'
 require 'pp'
 require 'nokogiri'
 require 'yaml'
+require 'set'
 
 # https://apidock.com/rails/ActiveSupport/Inflector/transliterate (for arabic)
 
 class BuildWordsDb
 
-	MIN_WORDS = 20000
+	MIN_WORDS = 50000
 
 	def initialize
-		@words = []
-		@first_words = []
+		@words = Set.new
+		@first_words = Set.new
 		@n_grams = { }
 
 		@pages_to_parse = []
