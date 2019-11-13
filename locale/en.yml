@@ -1,0 +1,6 @@
+# Non roman languages are transliterated to english first
+# because english alphabet is the simplest
+
+i18n:
+  transliterate:
+    rule:
