@@ -26,8 +26,7 @@ class BuildWordsDb
 	LOCALE_ALLOWED_CHAR = {
 		fr: 'abcdefghijklmnopqrstuvwxyzàâæçéèêëîïôœùûüÿ',
 		en: 'abcdefghijklmnopqrstuvwxyz',
-		de: 'abcdefghijklmnopqrstuvwxyzäöüß',
-		ar: 'abcdefghijklmnopqrstuvwxyz',
+		de: 'abcdefghijklmnopqrstuvwxyzäöüß'
 	}
 
 	def initialize( locale, min_words, transliterate: false )
@@ -89,7 +88,10 @@ class BuildWordsDb
 
 				sentence = I18n.transliterate( sentence ) if @transliterate
 
-				fs = sentence.downcase.gsub( /[,:=<>\\"'\/{}]/, ' ' ).gsub( /[^#{LOCALE_ALLOWED_CHAR[@locale.to_sym]}]/, ' ' ).squeeze( ' ' )
+				used_locale = LOCALE_ALLOWED_CHAR[@locale.to_sym]
+				used_locale ||= LOCALE_ALLOWED_CHAR[:en]
+
+				fs = sentence.downcase.gsub( /[,:=<>\\"'\/{}]/, ' ' ).gsub( /[^#{used_locale}]/, ' ' ).squeeze( ' ' )
 
 				if fs.length > 5
 
@@ -142,4 +144,4 @@ class BuildWordsDb
 
 end
 
-BuildWordsDb.new( 'ar', 100000, transliterate: true ).parse_pages
+BuildWordsDb.new( 'fa', 100000, transliterate: true ).parse_pages

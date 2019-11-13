@@ -5,9 +5,9 @@ en:
   i18n:
     transliterate:
       rule:
-        # CAUTION : thoses transliteration is good enough for fun words generation, do not use it for real arabic transliteration.
-        #
-        # Arabic transliteration
+        # CAUTION : these transliteration is good enough for fun words generation, do not use it for real arabic transliteration.
+        # data comes from http://mylanguages.org/farsi_romanization.php and http://mylanguages.org/arabic_romanization.php
+        # Arabic and farsi transliteration
         ا: a
         أ: a
         آ: a
