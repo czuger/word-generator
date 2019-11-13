@@ -9,6 +9,7 @@ require 'i18n'
 
 I18n.load_path = Dir['locale/*.yml']
 I18n.backend.load_translations
+I18n.config.available_locales = :en
 
 class Set
 	def pluck!
@@ -141,4 +142,4 @@ class BuildWordsDb
 
 end
 
-BuildWordsDb.new( 'ar', 10000, transliterate: true ).parse_pages
+BuildWordsDb.new( 'ar', 100000, transliterate: true ).parse_pages
