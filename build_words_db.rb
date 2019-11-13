@@ -133,4 +133,4 @@ class BuildWordsDb
 
 end
 
-BuildWordsDb.new( 'fr', 100000 ).parse_pages
+BuildWordsDb.new( 'de', 100000 ).parse_pages
