@@ -4,6 +4,14 @@ require 'nokogiri'
 require 'yaml'
 require 'set'
 
+class Set
+	def pluck!
+		plucked = first
+		delete(plucked)
+		plucked
+	end
+end
+
 # https://apidock.com/rails/ActiveSupport/Inflector/transliterate (for arabic)
 
 class BuildWordsDb
@@ -15,7 +23,7 @@ class BuildWordsDb
 		@first_words = Set.new
 		@n_grams = { }
 
-		@pages_to_parse = []
+		@pages_to_parse = Set.new
 	end
 
 	def parse_pages( start )
@@ -31,7 +39,7 @@ class BuildWordsDb
 		if @words.count >= MIN_WORDS || @pages_to_parse.empty?
 			return
 		else
-			link = @pages_to_parse.shift
+			link = @pages_to_parse.pluck!
 			puts "Processing #{link}"
 
 			doc = Nokogiri::HTML( open( link ) )
