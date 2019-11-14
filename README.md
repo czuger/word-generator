@@ -1,7 +1,7 @@
 # word-generator
 Creative work about words and sentences generation
 
-# Examples
+## Examples
 
 This is an example of french generated words
 ```
