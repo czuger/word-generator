@@ -2,25 +2,39 @@ require 'json'
 require 'hazard'
 
 letters_matrix = JSON.parse( File.read( 'words_db/fr' + '/letters_matrix.json' ) )
+$words_end = letters_matrix['words_end']
+
 wt = WeightedTable.new( floating_points: true )
 
+def word_end?( letters_array, word_array )
+	base_proba = $words_end[letters_array.join]
+
+	return false unless base_proba
+
+	normalized_proba = base_proba / 13
+
+	length_weight = (((word_array.count-4) ** 2) / 10.0) + 1
+	increased_proba = normalized_proba * length_weight
+
+	r = rand( 0.0...1.0 )
+	# p "#{normalized_proba} * #{length_weight} = #{increased_proba} >= #{r}"
+
+	r <= increased_proba
+end
+
 # Generate 10 words
-1.upto( 10 ).each do
+1.upto( 20 ).each do
 
 	word_array = []
 
 	wt.from_weighted_table( letters_matrix['first_letters'] )
-	current_letter = wt.sample
-	word_array << current_letter
+	first_letters = wt.sample
+	first_letters = first_letters.split( '' )
+	word_array += first_letters
 
-	l_m = letters_matrix['letters_matrix'][current_letter]
-	wt.from_weighted_table( l_m['letter_statistics'] )
-	second_letter = wt.sample
-	word_array << second_letter
+	letters_array = first_letters
 
-	letters_array = [ current_letter, second_letter ]
-
-	1.upto( rand( 4 .. 12 ) ).each do
+	until word_end?( letters_array, word_array ) do
 		l_m = letters_matrix['letters_matrix'][letters_array.join]
 
 		break unless l_m
