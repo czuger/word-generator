@@ -15,6 +15,58 @@ def count_hash_to_statistic_array(array )
 	result
 end
 
+def count_words( words )
+
+	letters_matrix = {}
+	first_letters = {}
+
+	words.each do |word, word_occurence|
+		# p "#{word}, #{word_occurence}"
+
+		# We skip very small words
+		next if word.length <= 3
+
+		# We skip really uncommon words
+		next if word_occurence < 5
+
+		letters = word.split( '' )
+
+		current_letter = letters.shift
+		first_letters[current_letter] ||= 0
+		first_letters[current_letter] += word_occurence
+
+		dual_letter_array = [ current_letter ]
+
+		until letters.empty?
+			new_letter = letters.shift
+
+			letters_matrix[current_letter] ||= { letters_counts: {} }
+			letters_matrix[current_letter][:letters_counts][new_letter] ||= 0
+			letters_matrix[current_letter][:letters_counts][new_letter] += word_occurence
+
+			if dual_letter_array.count >= 2
+				dual_letter_array.shift if dual_letter_array.count >= 3
+
+				dual_letter_key = dual_letter_array.join
+
+				letters_matrix[dual_letter_key] ||= { letters_counts: {} }
+				letters_matrix[dual_letter_key][:letters_counts][new_letter] ||= 0
+				letters_matrix[dual_letter_key][:letters_counts][new_letter] += word_occurence
+
+			end
+
+			# if current_letter == 'l' && new_letter == 'g'
+			# 	p "#{word}, #{word_occurence}"
+			# end
+
+			current_letter = new_letter
+			dual_letter_array << current_letter
+		end
+	end
+
+	[first_letters, letters_matrix]
+end
+
 Dir['words_db/*'].each do |locale|
 	if File.directory?( locale )
 
@@ -22,47 +74,13 @@ Dir['words_db/*'].each do |locale|
 
 		puts "Parsing #{locale}"
 
-		letters_matrix = {}
-		first_letters = {}
-		last_letters = {}
-
 		words = JSON.parse( File.read( locale + '/words.json' ) )
 
 		# pp words.reject{ |k, v| v < 20 }.map{ |k, v| [v, k] }.sort.reverse
 
-		words.each do |word, word_occurence|
-			# p "#{word}, #{word_occurence}"
+		first_letters, letters_matrix = count_words( words )
 
-			# We skip very small words
-			next if word.length <= 3
-
-			# We skip really uncommon words
-			next if word_occurence < 5
-
-			letters = word.split( '' )
-
-			current_letter = letters.shift
-			first_letters[current_letter] ||= 0
-			first_letters[current_letter] += word_occurence
-
-			until letters.empty?
-				new_letter = letters.shift
-
-				letters_matrix[current_letter] ||= { letters_counts: {} }
-				letters_matrix[current_letter][:letters_counts][new_letter] ||= 0
-				letters_matrix[current_letter][:letters_counts][new_letter] += word_occurence
-
-				if current_letter == 'l' && new_letter == 'g'
-					p "#{word}, #{word_occurence}"
-				end
-
-				current_letter = new_letter
-			end
-
-			last_letters[current_letter] ||= 0
-			last_letters[current_letter] += word_occurence
-		end
-
+		# Transform counts to stats
 		letters_matrix.keys.each do |key|
 			lm = letters_matrix[key]
 
@@ -76,7 +94,6 @@ Dir['words_db/*'].each do |locale|
 			f.write JSON.pretty_generate(
 				{
 					first_letters: first_letters,
-					last_letters: last_letters,
 					letters_matrix: letters_matrix
 				} )
 		end
