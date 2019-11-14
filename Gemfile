@@ -8,3 +8,5 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'nokogiri'
 gem 'i18n'
+
+gem 'hazard', '>= 1.3.1'

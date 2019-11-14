@@ -55,14 +55,16 @@ Dir['words_db/*'].each do |locale|
 
 			lm[:letters_counts].each do |corresponding_letter, letter_count|
 
-				lm[ :letter_statistics ] ||= {}
+				lm[ :letter_statistics ] ||= []
 
 				stat = letter_count * 100 / total_counts
 				if stat > 0.05
-					lm[ :letter_statistics ][ corresponding_letter ] = stat
+					lm[ :letter_statistics ] << [ stat, corresponding_letter ]
 				end
 
 			end
+
+			lm.delete( :letters_counts )
 		end
 
 		File.open( locale + '/letters_matrix.json', 'w' ) do |f|
