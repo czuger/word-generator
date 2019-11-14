@@ -70,7 +70,7 @@ end
 Dir['words_db/*'].each do |locale|
 	if File.directory?( locale )
 
-		next unless locale == 'words_db/fr'
+		# next unless locale == 'words_db/fr'
 
 		puts "Parsing #{locale}"
 

@@ -1,7 +1,7 @@
 require 'json'
 require 'hazard'
 
-letters_matrix = JSON.parse( File.read( 'words_db/fr' + '/letters_matrix.json' ) )
+letters_matrix = JSON.parse( File.read( 'words_db/de' + '/letters_matrix.json' ) )
 $words_end = letters_matrix['words_end']
 
 wt = WeightedTable.new( floating_points: true )
@@ -13,7 +13,7 @@ def word_end?( letters_array, word_array )
 
 	normalized_proba = base_proba / 13
 
-	length_weight = (((word_array.count-4) ** 2) / 10.0) + 1
+	length_weight = (((word_array.count-4) ** 3) / 10.0) + 1
 	increased_proba = normalized_proba * length_weight
 
 	r = rand( 0.0...1.0 )
