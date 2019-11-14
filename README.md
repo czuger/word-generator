@@ -3,8 +3,7 @@ Creative work about words and sentences generation
 
 # Examples
 
-This is a first example of french generated words : 
-
+This is an example of french generated words
 ```
 les
 suelles
@@ -47,7 +46,7 @@ catchandizig
 jouroyale
 ```
 
-This is an example of german generation
+This is an example of german generated words
 ```
 sprohlüben
 könis
@@ -92,7 +91,6 @@ eiche
 ```
 
 This is an example of english generated words
-
 ```
 lemeng
 dong
