@@ -7,7 +7,7 @@ def count_hash_to_statistic_array(array )
 
 	array.each do |corresponding_letter, letter_count|
 		stat = letter_count * 100 / total_counts
-		if stat > 0.01
+		if stat > 0.05
 			result << [ stat, corresponding_letter ]
 		end
 	end
@@ -25,7 +25,7 @@ def count_words( words )
 		# p "#{word}, #{word_occurence}"
 
 		# We skip very small words
-		next if word.length <= 3
+		# next if word.length <= 3
 
 		# We skip really uncommon words
 		next if word_occurence < 5

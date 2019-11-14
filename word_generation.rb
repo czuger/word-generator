@@ -1,7 +1,18 @@
 require 'json'
 require 'hazard'
 
-letters_matrix = JSON.parse( File.read( 'words_db/de' + '/letters_matrix.json' ) )
+# WORD_MINUS = 7
+# WORD_EXP = 3
+# letters_matrix = JSON.parse( File.read( 'words_db/de' + '/letters_matrix.json' ) )
+
+# WORD_MINUS = 4
+# WORD_EXP = 3
+# letters_matrix = JSON.parse( File.read( 'words_db/en' + '/letters_matrix.json' ) )
+
+WORD_MINUS = 5
+WORD_EXP = 3
+letters_matrix = JSON.parse( File.read( 'words_db/fr' + '/letters_matrix.json' ) )
+
 $words_end = letters_matrix['words_end']
 
 wt = WeightedTable.new( floating_points: true )
@@ -13,7 +24,7 @@ def word_end?( letters_array, word_array )
 
 	normalized_proba = base_proba / 13
 
-	length_weight = (((word_array.count-4) ** 3) / 10.0) + 1
+	length_weight = (((word_array.count-WORD_MINUS) ** WORD_EXP) / 10.0) + 1
 	increased_proba = normalized_proba * length_weight
 
 	r = rand( 0.0...1.0 )
@@ -22,8 +33,7 @@ def word_end?( letters_array, word_array )
 	r <= increased_proba
 end
 
-# Generate 10 words
-1.upto( 20 ).each do
+1.upto( 40 ).each do
 
 	word_array = []
 
