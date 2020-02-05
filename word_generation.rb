@@ -11,7 +11,11 @@ require 'hazard'
 
 WORD_MINUS = 5
 WORD_EXP = 3
-letters_matrix = JSON.parse( File.read( 'words_db/fr' + '/letters_matrix.json' ) )
+letters_matrix = JSON.parse( File.read( 'words_db/zu' + '/letters_matrix.json' ) )
+
+# WORD_MINUS = 5
+# WORD_EXP = 3
+# letters_matrix = JSON.parse( File.read( 'words_db/wo' + '/letters_matrix.json' ) )
 
 $words_end = letters_matrix['words_end']
 
