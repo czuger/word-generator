@@ -29,6 +29,8 @@ class BuildWordsDb
 		de: 'abcdefghijklmnopqrstuvwxyzäöüß'
 	}
 
+	UNPROCESSABLE_TRANSLITERATION_CHARACTERS= '()ٔ‌.َِّْ'
+
 	def initialize( locale, min_words, transliterate: false )
 		@words = {}
 		@first_words = {}
@@ -85,7 +87,9 @@ class BuildWordsDb
 		doc.xpath( '//p' ).each do |p|
 			p.text.split( '.' ).each do |sentence|
 
-				sentence = I18n.transliterate( sentence ) if @transliterate
+				if @transliterate
+					sentence = I18n.transliterate( sentence.gsub( /[#{UNPROCESSABLE_TRANSLITERATION_CHARACTERS}]/, '' ) )
+				end
 
 				used_locale = LOCALE_ALLOWED_CHAR[@locale.to_sym]
 				used_locale ||= LOCALE_ALLOWED_CHAR[:en]

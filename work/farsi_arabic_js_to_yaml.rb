@@ -11,7 +11,7 @@ File.open( 'farsi_arabic_romanization.js', 'r' ).readlines.each do |line|
 
 	if m
 		# puts "#{m[1]}: \"#{m[2]}\""
-		trans[m[1]] = m[2].delete( "'" )
+		trans[m[1].to_s] = m[2].delete( "'" )
 	else
 		# p line, m
 	end
