@@ -7,9 +7,7 @@ def count_hash_to_statistic_array(array )
 
 	array.each do |corresponding_letter, letter_count|
 		stat = letter_count * 100 / total_counts
-		if stat > 0.05
-			result << [ stat, corresponding_letter ]
-		end
+    result << [ stat, corresponding_letter ]
 	end
 
 	result
@@ -20,6 +18,7 @@ def count_words( words )
 	letters_matrix = {}
 	first_letters = {}
 	words_end = {}
+  words_count = {}
 
 	words.each do |word, word_occurence|
 		# p "#{word}, #{word_occurence}"
@@ -28,7 +27,10 @@ def count_words( words )
 		# next if word.length <= 3
 
 		# We skip really uncommon words
-		next if word_occurence < 5
+		# next if word_occurence < 5
+
+    words_count[word.length] ||= 0
+    words_count[word.length] += 1
 
 		letters = word.split( '' )
 
@@ -67,7 +69,7 @@ def count_words( words )
 		words_end[tri_letter_array.join] += 1
 	end
 
-	[first_letters, letters_matrix, words_end]
+	[first_letters, letters_matrix, words_end, words_count]
 end
 
 Dir['words_db/*'].each do |locale|
@@ -81,7 +83,7 @@ Dir['words_db/*'].each do |locale|
 
 		# pp words.reject{ |k, v| v < 20 }.map{ |k, v| [v, k] }.sort.reverse
 
-		first_letters, letters_matrix, words_end = count_words( words )
+		first_letters, letters_matrix, words_end, words_count = count_words( words )
 
 		# Transform counts to stats
 		letters_matrix.keys.each do |key|
@@ -94,14 +96,21 @@ Dir['words_db/*'].each do |locale|
 		first_letters = count_hash_to_statistic_array(first_letters )
 		words_end = Hash[count_hash_to_statistic_array(words_end ).map{ |k, v| [ v, k ] }]
 
-		File.open( locale + '/letters_matrix.json', 'w' ) do |f|
-			f.write JSON.pretty_generate(
-				{
-					first_letters: first_letters,
-					words_end: words_end,
-					letters_matrix: letters_matrix
-				} )
-		end
+		File.open( locale + '/first_letters.json', 'w' ) do |f|
+			f.write JSON.pretty_generate( first_letters )
+    end
+
+    File.open( locale + '/letters_matrix.json', 'w' ) do |f|
+      f.write JSON.pretty_generate( letters_matrix )
+    end
+
+    File.open( locale + '/words_end.json', 'w' ) do |f|
+      f.write JSON.pretty_generate( words_end )
+    end
+
+    File.open( locale + '/words_count.json', 'w' ) do |f|
+      f.write JSON.pretty_generate( count_hash_to_statistic_array( words_count ) )
+    end
 
 	end
 end
